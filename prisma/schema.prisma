@@ -1,0 +1,39 @@
+generator client {
+  provider   = "prisma-client"
+  output     = "../src/generated/client"
+  engineType = "library"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([username])
+}
+
+model Caso {
+  id          String      @id @default(uuid())
+  nombre      String
+  descripcion String
+  estado      EstadoCaso  @default(ABIERTO)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([estado])
+  @@index([createdAt])
+  @@index([estado, createdAt])
+}
+
+enum EstadoCaso {
+  ABIERTO
+  EN_PROCESO
+  CERRADO
+  ARCHIVADO
+}

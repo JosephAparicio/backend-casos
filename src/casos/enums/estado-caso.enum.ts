@@ -1,0 +1,6 @@
+export enum EstadoCaso {
+  ABIERTO = 'ABIERTO',
+  EN_PROCESO = 'EN_PROCESO',
+  CERRADO = 'CERRADO',
+  ARCHIVADO = 'ARCHIVADO',
+}
