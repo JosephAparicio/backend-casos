@@ -17,13 +17,15 @@ Backend de la prueba técnica NXT: API RESTful robusta para la gestión de exped
 - Node.js 20+
 - npm 10+
 
-## 🔧 Instalación
+## 🔧 Instalación y Ejecución Local
+
+### 1. Instalar dependencias
 
 ```bash
 npm install
 ```
 
-## ⚙️ Variables de Entorno
+### 2. Configurar variables de entorno
 
 Crear un archivo `.env` en la raíz con el siguiente contenido:
 
@@ -31,36 +33,24 @@ Crear un archivo `.env` en la raíz con el siguiente contenido:
 PORT=4000
 DATABASE_URL="file:./dev.db"
 JWT_SECRET="cambia-este-valor-por-un-secreto-seguro"
-FRONTEND_URL="http://localhost:3000" # Para configuración CORS
+FRONTEND_URL="http://localhost:3000"
 ```
 
-> **Nota**: `DATABASE_URL` apunta al archivo SQLite local.
-
-## 🏃 Ejecución
-
-### Inicialización de Base de Datos
-
-Antes de correr el servidor, asegúrate de generar el cliente de Prisma y sincronizar la base de datos:
+### 3. Generar cliente de Prisma
 
 ```bash
 npx prisma generate
-npx prisma db push
 ```
 
-### Modo Desarrollo
+> **Nota**: La base de datos SQLite (`dev.db`) ya está incluida en el repositorio con datos de ejemplo. Solo ejecuta `npx prisma db push` si modificas el archivo `schema.prisma`.
+
+### 4. Iniciar servidor
 
 ```bash
 npm run start:dev
 ```
 
 El servidor estará disponible en `http://localhost:4000/api`
-
-### Modo Producción
-
-```bash
-npm run build
-npm run start:prod
-```
 
 ## 📁 Estructura del Proyecto
 
@@ -92,7 +82,7 @@ src/
 
 1. **Login/Registro**: El usuario envía credenciales.
 2. **Validación**: Se verifican credenciales y se genera un JWT firmado.
-3. **Respuesta**: El token se devuelve (idealmente en cookie httpOnly para máxima seguridad, o en body para clientes móviles).
+3. **Respuesta**: El token se devuelve en una cookie httpOnly.
 4. **Protección**: El `JwtAuthGuard` intercepta requests a rutas protegidas y valida el token.
 
 ### Medidas de Seguridad
@@ -108,6 +98,7 @@ src/
 
 - `POST /register`: Registrar nuevo usuario
 - `POST /login`: Iniciar sesión
+- `POST /logout`: Cerrar sesión
 
 ### Casos (`/api/casos`)
 
@@ -140,7 +131,7 @@ src/
 
 1. **Build**: `npm run build`
 2. **Start**: `npm run start:prod`
-3. **Variables**: Configurar `DATABASE_URL`, `JWT_SECRET`, `PORT`.
+3. **Variables**: Configurar `DATABASE_URL`, `JWT_SECRET`, `PORT`, `FRONTEND_URL`.
 4. **Base de Datos**:
    - Para producción, se recomienda migrar de SQLite a **PostgreSQL**.
    - Cambiar el provider en `schema.prisma` a `postgresql`.
@@ -149,7 +140,7 @@ src/
 
 ### ¿Por qué NestJS?
 
-- **Estructura**: Arquitectura angular-like que fuerza buenas prácticas.
+- **Estructura**: Arquitectura modular que fuerza buenas prácticas.
 - **TypeScript**: Soporte de primera clase.
 - **Escalabilidad**: Modularidad nativa.
 
@@ -163,4 +154,6 @@ src/
 ```bash
 npm run lint          # Linter
 npm run format        # Prettier
+npm run start:dev     # Desarrollo
+npm run start:prod    # Producción
 ```
